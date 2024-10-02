@@ -1,0 +1,35 @@
+CREATE TABLE employee_absence (
+    employee_number INT,
+    employee_name VARCHAR(255),
+    gender VARCHAR(10),
+    city VARCHAR(100),
+    job_title VARCHAR(100),
+    department VARCHAR(100),
+    store_location VARCHAR(100),
+    business_unit VARCHAR(100),
+    division VARCHAR(100),
+    age INT,
+    length_of_service INT,
+    hours_absent INT
+);
+
+COPY employee_absence
+FROM 's3://replace_with_bucket_name/employee_absence.csv'
+IAM_ROLE 'arn:aws:iam::replace_with_role_info'
+FORMAT AS CSV
+DELIMITER '|'
+IGNOREHEADER 1;
+
+SELECT * FROM employee_absence;
+
+SELECT query_id,
+       table_name,
+       data_source,
+       status,
+       duration/1000000.0 duration_secs,
+       file_format,
+       error_count,
+       loaded_rows,
+       loaded_bytes
+FROM sys_load_history
+ORDER BY data_source DESC;
